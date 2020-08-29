@@ -20,7 +20,7 @@
   />
   <div style="margin: 16px;">
     <van-button round block type="info" native-type="submit">
-      提交
+      登录
     </van-button>
   </div>
   <div class="tips">
@@ -32,6 +32,12 @@
 
 <script>
 export default {
+  created () {
+    console.log(this.$route)
+    const { username, password } = this.$route.params
+    this.username = username
+    this.password = password
+  },
   methods: {
     async login () {
       const res = await this.$axios.post('/login', {
@@ -39,8 +45,11 @@ export default {
         password: this.password
       })
       console.log(res)
-      const { statusCode, message } = res.data
+      const { statusCode, message, data } = res.data
+      // 登陆成功把token存储到本地
       if (statusCode === 200) {
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('userId', data.user.id)
         this.$toast(message)
         this.$router.push('/user')
       } else {
@@ -61,7 +70,7 @@ export default {
 }
 </script>
 
-<style lang='less'>
+<style lang='less'  scoped>
 .tips{
   font-size: 16px;
   text-align: right;

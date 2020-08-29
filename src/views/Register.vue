@@ -44,7 +44,24 @@ export default {
       const { statusCode, message } = res.data
       if (statusCode === 200) {
         this.$toast(message)
-        this.$router.push('/login')
+        // 注册完成后跳转并把账号密码一起转向login
+        // 1.query 通过路由的quert传参,url后的拼串不安全
+        // const { username, password } = this.user
+        // this.$router.push({
+        //   path: '/login',
+        //   query: {
+        //     username: username,
+        //     password: password
+        //   }
+        // })
+        // 2.通过params传参, 必须通过命名路由的方式, 通过路由的name属性
+        this.$router.push({
+          name: 'login',
+          params: {
+            username: this.user.username,
+            password: this.user.password
+          }
+        })
       } else {
         this.$toast(message)
       }
@@ -67,7 +84,13 @@ export default {
 
 }
 </script>
-
-<style>
-
+<style lang='less'  scoped>
+.tips{
+  font-size: 16px;
+  text-align: right;
+  margin: 16px;
+  a{
+    color: rgb(40, 98, 214);
+  }
+}
 </style>
