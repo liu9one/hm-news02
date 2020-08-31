@@ -1,6 +1,6 @@
 <template>
   <div class="user">
-      <div class="user-header">
+      <div class="user-header" @click='$router.push("/user-edit")'>
           <div class="avatar">
               <img :src='$axios.defaults.baseURL + user.head_img' alt="">
           </div>
@@ -53,14 +53,9 @@ export default {
       }
     })
     console.log(res)
-    const { statusCode, data, message } = res.data
+    const { statusCode, data } = res.data
     if (statusCode === 200) {
       this.user = data
-    } else if (statusCode === 401) {
-      this.$toast(message)
-      this.$router.push('/login')
-      localStorage.removeItem('token')
-      localStorage.removeItem('userId')
     }
   }
 }

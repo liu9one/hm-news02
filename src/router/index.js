@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login'
 import Register from '../views/Register'
 import User from '../views/User'
+import UserEdit from '../views/UserEdit.vue'
 
 Vue.use(VueRouter)
 
@@ -15,7 +16,8 @@ VueRouter.prototype.push = function push (location) {
 const routes = [
   { path: '/login', component: Login, name: 'login' },
   { path: '/register', component: Register, name: 'register' },
-  { path: '/user', component: User, name: 'user' }
+  { path: '/user', component: User, name: 'user' },
+  { path: '/user-edit', component: UserEdit, name: 'user-edit' }
 ]
 
 const router = new VueRouter({
@@ -33,8 +35,9 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   // 只要路由发生跳转,跳转之前这个函数就要执行
   const token = localStorage.getItem('token')
-  console.log(token)
-  if (to.name !== 'user' || token) {
+  // console.log(token)
+  const authUrls = ['user', 'user-edit']
+  if (!authUrls.includes(to.name) || token) {
     next()
   } else {
     router.push('/login')
