@@ -15,7 +15,7 @@
               <span class="iconfont iconjiantou1"></span>
           </div>
       </div>
-    <new-navitem to='/follw'>
+    <new-navitem to='/my-follow'>
         <template>我的关注</template>
         <template #content>关注的用户</template>
     </new-navitem>

@@ -3,6 +3,7 @@
       <new-header>编辑信息</new-header>
       <div class="avatar">
           <img :src="$axios.defaults.baseURL + user.head_img" alt="">
+          <van-uploader :after-read="afterRead" />
       </div>
       <new-navitem @click='showNickname'>
           <template> 昵称 </template>
@@ -31,6 +32,7 @@
     v-model = 'nickname'
     placeholder="请输入昵称"
     bind:change="onChange"
+    ref='nickname'
   />
 </van-dialog>
       <van-dialog
@@ -47,6 +49,7 @@
     v-model = 'password'
     placeholder="请输入密码"
     bind:change="onChange"
+    ref='password'
   />
 </van-dialog>
 
@@ -77,12 +80,31 @@
 <div class="logout" @click='logout' >
     <van-button type="danger" block >退出登录</van-button>
 </div>
+
+<!-- 裁剪框  -->
+<div class="mask" v-show="isshowMask">
+  <van-button  @click='isshowMask = false' class="cancel" type="default">取消</van-button>
+  <van-button  @click='crop' class="crop" type="primary">确定</van-button>
+  <vueCropper
+  ref="cropper"
+  :img="img"
+  autoCropWidth='100%'
+  autoCropHeight='100%'
+  fixed
+  :info='false'
+  autoCrop
+></vueCropper>
+</div>
   </div>
 
 </template>
 
 <script>
+import { VueCropper } from 'vue-cropper'
 export default {
+  components: {
+    VueCropper
+  },
   data () {
     return {
       user: '',
@@ -91,13 +113,48 @@ export default {
       isshowPassword: false,
       password: '',
       isshowGender: false,
-      gender: 1
+      gender: 1,
+      img: '',
+      isshowMask: false
     }
   },
   created () {
     this.getUserInfo()
   },
   methods: {
+    // 判断图片的格式个大小
+    isImg (name) {
+      if (name.endsWith('.gif') || name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('png')) {
+        return true
+      } else {
+        return false
+      }
+    },
+    async afterRead (file) {
+      console.log(file)
+      if (!this.isImg(file.file.name)) {
+        return this.$toast('图片格式不正确')
+      }
+      if (file.file.size > 200 * 1024) {
+        return this.$toast('图片内容过大')
+      }
+      this.isshowMask = true
+      this.img = file.content
+    },
+    async crop () {
+      this.$refs.cropper.getCropBlob(async blob => {
+        console.log(blob)
+        const fd = new FormData()
+        fd.append('file', blob)
+        const res = await this.$axios.post('/upload', fd)
+        const { statusCode, data } = res.data
+        if (statusCode === 200) {
+          console.log(data)
+          this.updateUser({ head_img: data.url })
+          this.isshowMask = false
+        }
+      })
+    },
     async getUserInfo () {
       const userId = localStorage.getItem('userId')
       const res = await this.$axios.get(`/user/${userId}`)
@@ -108,9 +165,11 @@ export default {
       }
     },
     // 显示nickname修改框
-    showNickname () {
+    async showNickname () {
       this.nickname = this.user.nickname
       this.isshownickname = true
+      await this.$nextTick
+      this.$refs.nickname.focus()
     },
     async updateUser (data) {
       const userId = localStorage.getItem('userId')
@@ -124,9 +183,11 @@ export default {
       this.updateUser({ nickname: this.nickname })
     },
     // 显示密码框更改
-    showPassword () {
+    async showPassword () {
       this.password = this.user.password
       this.isshowPassword = true
+      await this.$nextTick
+      this.$refs.password.focus()
     },
     // 更新密码
     async updatePassword () {
@@ -172,5 +233,39 @@ export default {
 }
 .logout{
     padding: 10px;
+}
+.avatar {
+  padding: 40px 0;
+  text-align: center;
+  position: relative;
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+  .van-uploader {
+    position: absolute;
+    left: 50%;
+    top: 40px;
+    transform: translate(-50%);
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+  }
+}
+.mask{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 999;
+  .cancel
+  .crop{
+    position: fixed;
+    z-index: 1;
+  }
+  .crop{
+    right: 0;
+  }
 }
 </style>
