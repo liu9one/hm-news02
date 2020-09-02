@@ -1,7 +1,15 @@
 <template>
   <div class="my-comment">
       <new-header>我的回复</new-header>
-       <div class="list">
+     <div class="list">
+    <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+       <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+        :immediate-check='false'
+        >
       <div class="item" v-for="item in commentList" :key="item.id">
         <div class="time">{{item.create_date| time('YYYY-MM-DD HH:mm')}}</div>
         <div class="comment" v-if="item.parent">
@@ -16,6 +24,9 @@
         </div>
       </div>
 
+    </van-list>
+  </van-pull-refresh>
+
     </div>
   </div>
 </template>
@@ -24,7 +35,12 @@
 export default {
   data () {
     return {
-      commentList: []
+      commentList: [],
+      pageIndex: 1,
+      pageSize: 7,
+      finished: false,
+      loading: false,
+      refreshing: false
     }
   },
   created () {
@@ -32,12 +48,37 @@ export default {
   },
   methods: {
     async getComment () {
-      const res = await this.$axios.get('/user_comments')
+      const res = await this.$axios.get('/user_comments', {
+        params: {
+          pageIndex: this.pageIndex,
+          pageSize: this.pageSize
+        }
+      })
       const { statusCode, data } = res.data
       if (statusCode === 200) {
-        this.commentList = data
+        this.commentList = [...this.commentList, ...data]
         console.log(this.commentList)
+        this.loading = false
+        this.refreshing = false
+        if (data.length < this.pageSize) {
+          this.finished = true
+        }
       }
+    },
+    onLoad () {
+      setTimeout(() => {
+        this.pageIndex++
+        this.getComment()
+      }, 1000)
+    },
+    onRefresh () {
+      setTimeout(() => {
+        this.commentList = []
+        this.pageIndex = 1
+        this.loading = true
+        this.finished = false
+        this.getComment()
+      }, 1000)
     }
   }
 }

@@ -9,7 +9,7 @@ Vue.prototype.$base = URL
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
   // 在请求之前做的事
-  console.log(config)
+  // console.log(config)
   const token = localStorage.getItem('token')
   if (token) {
     config.headers.Authorization = token
@@ -20,7 +20,7 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(res => {
   // 对响应数据做的事
 // 解决在响应拦截解决token时效问题
-  console.log(res)
+  // console.log(res)
   const { statusCode, message } = res.data
   if (statusCode === 401 && message === '用户验证失败') {
     // 1.跳转到login
@@ -32,3 +32,12 @@ axios.interceptors.response.use(res => {
   }
   return res
 })
+
+// 判断图片是否为网络地址
+Vue.prototype.$url = function (url) {
+  if (url.startsWith('http')) {
+    return url
+  } else {
+    return URL + url
+  }
+}

@@ -8,6 +8,7 @@ import './styles/iconfont.css'
 import newHeader from './components/new-header'
 import newLogo from './components/new-logo'
 import newNavItem from './components/new-navitem.vue'
+import newsPost from './components/news-post.vue'
 // 导入vant
 import Vant from 'vant'
 import 'vant/lib/index.css'
@@ -23,6 +24,7 @@ Vue.filter('time', (input, str = 'YYYY-MM-DD') => {
 Vue.component('new-header', newHeader)
 Vue.component('new-logo', newLogo)
 Vue.component('new-navitem', newNavItem)
+Vue.component('news-post', newsPost)
 
 Vue.config.productionTip = false
 

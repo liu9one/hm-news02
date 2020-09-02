@@ -23,12 +23,12 @@
         <template >我的跟帖</template>
         <template #content>跟帖/回复</template>
     </new-navitem>
-    <new-navitem>
+    <new-navitem to='/my-star'>
         <template>我的收藏</template>
         <template #content>文章/视频</template>
     </new-navitem>
-    <new-navitem>
-        <template>设置</template>
+    <new-navitem to='/user-edit'>
+        <template >设置</template>
         <template #content></template>
     </new-navitem>
 
