@@ -19,8 +19,8 @@
         <template>我的关注</template>
         <template #content>关注的用户</template>
     </new-navitem>
-    <new-navitem>
-        <template>我的跟帖</template>
+    <new-navitem to='/my-comment'>
+        <template >我的跟帖</template>
         <template #content>跟帖/回复</template>
     </new-navitem>
     <new-navitem>

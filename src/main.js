@@ -17,8 +17,8 @@ import './utils/request'
 import moment from 'moment'
 
 Vue.use(Vant)
-Vue.filter('time', input => {
-  return moment(input).format('YYYY-MM-DD')
+Vue.filter('time', (input, str = 'YYYY-MM-DD') => {
+  return moment(input).format(str)
 })
 Vue.component('new-header', newHeader)
 Vue.component('new-logo', newLogo)

@@ -5,6 +5,7 @@ import Register from '../views/Register'
 import User from '../views/User'
 import UserEdit from '../views/UserEdit.vue'
 import MyFollow from '../views/MyFollow.vue'
+import MyComment from '../views/MyComment.vue'
 
 Vue.use(VueRouter)
 
@@ -19,7 +20,8 @@ const routes = [
   { path: '/register', component: Register, name: 'register' },
   { path: '/user', component: User, name: 'user' },
   { path: '/user-edit', component: UserEdit, name: 'user-edit' },
-  { path: '/my-follow', component: MyFollow, name: 'my-follow' }
+  { path: '/my-follow', component: MyFollow, name: 'my-follow' },
+  { path: '/my-comment', component: MyComment, name: 'my-comment' }
 ]
 
 const router = new VueRouter({
@@ -38,7 +40,7 @@ router.beforeEach((to, from, next) => {
   // 只要路由发生跳转,跳转之前这个函数就要执行
   const token = localStorage.getItem('token')
   // console.log(token)
-  const authUrls = ['user', 'user-edit']
+  const authUrls = ['user', 'user-edit', 'my-follow', 'my-commnet']
   if (!authUrls.includes(to.name) || token) {
     next()
   } else {
