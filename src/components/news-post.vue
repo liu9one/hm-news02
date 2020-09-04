@@ -1,7 +1,21 @@
 <template>
   <div class="hm-post">
-       <div class="list">
-          <div class="single-img-post " v-if="post.cover.length<3" >
+       <div class="list" @click="$router.push(`/article/${post.id}`)">
+
+           <div class="video-post" v-if="post.type === 2">
+              <div class="info">
+                  <div class="title">{{post.title}}</div>
+                  <div class="video">
+                      <span class="iconfont iconshipin"></span>
+                      <img :src="$url(post.cover[0].url)" alt="">
+                  </div>
+                  <div class="user">
+                      <span class="nickname">{{post.user.nickname}}</span>
+                      <span class="follow"> {{post.comment_length}}人跟帖</span>
+                  </div>
+          </div>
+           </div>
+          <div class="single-img-post " v-else-if="post.cover.length<3 && post.cover.length>0" >
               <div class="info">
                   <div class="title">{{post.title}}</div>
                   <div class="user">
@@ -13,7 +27,7 @@
                   <img :src="$url(post.cover[0].url)" alt="">
               </div>
           </div>
-          <div class="multiple-img-post" v-else>
+          <div class="multiple-img-post" v-else-if="post.cover.length>2">
               <div class="title">{{post.title}}</div>
               <div class="imgs">
                   <img :src="$url(post.cover[0].url)" alt="">
@@ -85,5 +99,36 @@ export default {
       height: 74px;
     }
   }
+}
+.video-post{
+    padding: 15px;
+     font-size: 18px;
+     border: 1px solid #ccc;
+    .video{
+        position: relative;
+        img{
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+        }
+        span{
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            background-color: rgba(255, 255, 255, .6);
+            border-radius: 50%;
+            line-height: 50px;
+            text-align: center;
+            font-size: 30px;
+            color: #fff;
+        }
+    }
+    .user{
+        font-size: 14px;
+        color: #aaa;
+    }
 }
 </style>
