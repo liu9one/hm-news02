@@ -83,6 +83,9 @@ export default {
       })
       const { statusCode, data } = res.data
       if (statusCode === 200) {
+        if (this.pageIndex === 1) {
+          this.newsList = []
+        }
         this.newsList = [...this.newsList, ...data]
         console.log(this.newsList)
 
