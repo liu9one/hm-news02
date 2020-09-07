@@ -36,6 +36,10 @@ Vue.component('hm-floor', hmFloor)
 
 Vue.config.productionTip = false
 
+// 使用bus 传递参数
+const bus = new Vue()
+Vue.prototype.$bus = bus
+
 new Vue({
   router,
   render: h => h(App)

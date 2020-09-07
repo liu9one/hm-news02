@@ -13,7 +13,7 @@
       <div class="item" v-for="item in commentList" :key="item.id">
         <div class="time">{{item.create_date| time('YYYY-MM-DD HH:mm')}}</div>
         <div class="comment" v-if="item.parent">
-          <div class="name">回复：{{item.parent.user.nickname}}</div>
+          <div class="name"> 回复：{{item.parent.user.nickname}}</div>
           <div class="comment_content">{{item.parent.content}}</div>
         </div>
         <div class="content">{{item.content}}</div>

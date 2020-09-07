@@ -8,11 +8,11 @@
             <p>{{comment.user.nickname}} </p>
             <p>{{comment.create_date | timeNow}}</p>
           </div>
-          <div class="right">
+          <div class="right" @click="reply">
             <span>回复</span>
           </div>
         </div>
-        <hm-floor :floor='comment.parent' v-if="comment.parent"></hm-floor>
+        <hm-floor  :count='count' @reply='onReply' :floor='comment.parent' v-if="comment.parent"></hm-floor>
         <div class="content">
            {{comment.content}}
         </div>
@@ -23,6 +23,26 @@
 export default {
   props: {
     comment: Object
+  },
+  data () {
+    return {
+      count: this.getCount(0, this.comment)
+    }
+  },
+  methods: {
+    getCount (num, data) {
+      if (data.parent) {
+        return this.getCount(num + 1, data.parent)
+      } else {
+        return num
+      }
+    },
+    reply () {
+      this.$bus.$emit('reply', this.comment.id, this.comment.user.nickname)
+    },
+    onReply (id, nickname) {
+      this.$emit('reply', id, nickname)
+    }
   }
 }
 </script>

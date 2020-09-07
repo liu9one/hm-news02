@@ -42,6 +42,7 @@
 
 <script>
 export default {
+  name: 'index',
   data () {
     return {
       active: 0,
@@ -62,7 +63,7 @@ export default {
       const activeList = JSON.parse(localStorage.getItem('activeList'))
       if (activeList) {
         this.list = activeList
-        this.getNewsList(this.list[0].id)
+
         return
       }
       const res = await this.$axios.get('/category')

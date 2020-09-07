@@ -37,11 +37,15 @@
         <!-- 评论区组件 -->
 
         <h4>精彩回帖</h4>
-       <hm-comment v-for="item in commentList " :key="item.id" :comment='item'></hm-comment>
+       <hm-comment v-for="item in  commentList "   @reply='onReply' :key="item.id" :comment='item'></hm-comment>
       </div>
-      <div class="footer">
+       <div class="footer-textarea" v-if="isshowTextarea">
+      <textarea :placeholder="'回复：' + nickname" ref="textarea" v-model="content"></textarea>
+      <van-button type="primary" @click="publish">发送</van-button>
+    </div>
+      <div class="footer" v-else>
           <div class="input">
-            <input type="text " placeholder="回复">
+            <input type="text " placeholder="回复" @focus="onFocus">
           </div>
           <span class="iconfont  iconpinglun-"><i>{{articleInfo.comment_length}}</i></span>
           <span class="iconfont iconshoucang" :class="{activeStar:articleInfo.has_star}" @click="star"></span>
@@ -57,12 +61,29 @@ export default {
       articleInfo: {
         user: {}
       },
-      commentList: []
+      commentList: [],
+      isshowTextarea: false,
+      content: '',
+      nickname: '',
+      replyId: ''
     }
   },
   created () {
     this.getArticle()
     this.getCommentList()
+    // 给bus注册自定义事件
+    // this.$bus.$on('reply', async (id, nickname) => {
+    //   this.isshowTextarea = true
+    //   await this.$nextTick()
+    //   this.$refs.textarea.focus()
+    //   // 回显nickname
+    //   this.nickname = '@' + nickname
+    //   this.replyId = id
+    // })
+    this.$bus.$on('reply', this.onReply)
+  },
+  beforeDestroy () {
+    this.$bus.$off('reply', this.onReply)
   },
   methods: {
     async getArticle () {
@@ -134,6 +155,35 @@ export default {
         this.commentList = data
         console.log(this.commentList)
       }
+    },
+    async onFocus () {
+      this.isshowTextarea = true
+      await this.$nextTick()
+      this.$refs.textarea.focus()
+    },
+    async publish () {
+      if (this.content.trim() === '') return this.$toast('内容不能为空')
+      const res = await this.$axios.post(`/post_comment/${this.articleInfo.id}`, {
+        content: this.content,
+        parent_id: this.replyId
+      })
+      const { statusCode, message } = res.data
+      if (statusCode === 200) {
+        this.$toast.success(message)
+        this.content = ''
+        this.replyId = ''
+        this.nickname = ''
+        this.isshowTextarea = false
+        this.getCommentList()
+      }
+    },
+    async onReply (id, nickname) {
+      console.log(id, nickname)
+      this.isshowTextarea = true
+      await this.$nextTick()
+      this.$refs.textarea.focus()
+      this.replyId = id
+      this.nickname = '@' + nickname
     }
   }
 }
@@ -266,6 +316,28 @@ border-bottom: 3px solid #ccc;
   h4{
     text-align: center;
     margin-top:20px ;
+  }
+}
+.footer-textarea {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  position: fixed;
+  z-index: 999;
+  bottom: 0;
+  padding: 10px;
+  align-items: flex-end;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  justify-content: space-around;
+  textarea {
+    width: 260px;
+    height: 80px;
+    background-color: #ccc;
+    border-radius: 5px;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
   }
 }
 

@@ -1,15 +1,16 @@
 <template>
   <div>
-      <hm-floor :floor='floor.parent' v-if="floor.parent"></hm-floor>
+      <!-- <hm-floor :floor='floor.parent'  @reply='onReply' :count ='count - 1' v-if="floor.parent"></hm-floor> -->
+      <hm-floor :floor='floor.parent'   :count ='count - 1' v-if="floor.parent"></hm-floor>
       <div class="hm-floor">
       <div class="title">
           <div class="name">
-              {{floor.user.nickname}}
+             {{count}}. {{floor.user.nickname}}
           </div>
           <div class="time">
               {{floor.create_date | timeNow}}
           </div>
-          <div class="right">回复</div>
+          <div class="right" @click="reply">回复</div>
       </div>
       <div class="content">
           {{floor.content}}
@@ -22,7 +23,16 @@
 export default {
   name: 'hm-floor',
   props: {
-    floor: Object
+    floor: Object,
+    count: Number
+  },
+  methods: {
+    reply () {
+      this.$bus.$emit('reply', this.floor.id, this.floor.user.nickname)
+    }
+    // onReply (id, nickname) {
+    //   this.$emit('reply', id, nickname)
+    // }
   }
 }
 </script>
