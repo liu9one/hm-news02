@@ -2,7 +2,7 @@
   <div class="hm-comment">
        <div class="header">
           <div class="avatar">
-            <img src="../assets/01.png" alt="">
+            <img :src="$base + comment.user.head_img" alt="">
           </div>
           <div class="user">
             <p>{{comment.user.nickname}} </p>

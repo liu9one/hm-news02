@@ -141,7 +141,7 @@ export default {
     async star () {
       if (this.noLogin()) return
       const { id } = this.$route.params
-      const res = this.$axios.get(`/post_star/${id}`)
+      const res = await this.$axios.get(`/post_star/${id}`)
       if (res.data.statusCode === 200) {
         this.$toast.success('收藏成功')
         this.getArticle()

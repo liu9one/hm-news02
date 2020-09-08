@@ -18,7 +18,7 @@
         </div>
         <div class="content">{{item.content}}</div>
         <div class="origin">
-          <span class="one-txt-cut">原文：{{item.post.title
+          <span class="one-txt-cut" @click="$router.push(`/article/${item.post.id}`)">原文：{{item.post.title
               }}</span>
           <span class="iconfont iconjiantou1"></span>
         </div>
