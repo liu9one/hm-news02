@@ -1,17 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Login from '../views/user/Login.vue'
-import Register from '../views/user/Register.vue'
-import User from '../views/user/User.vue'
-import UserEdit from '../views/user/UserEdit.vue'
-import MyFollow from '../views/user/MyFollow.vue'
-import MyComment from '../views/user/MyComment.vue'
-import MyStar from '../views/user/MyStar.vue'
-import Home from '../views/news/Home.vue'
-import Manage from '../views/news/Manage.vue'
-import Article from '../views/news/Article.vue'
-import Search from '../views/news/Search.vue'
+const Login = () => import(/* webpackChunkName: "user" */ '../views/user/Login.vue')
+const Register = () => import(/* webpackChunkName: "user" */ '../views/user/Register.vue')
+const User = () => import(/* webpackChunkName: "user" */ '../views/user/User.vue')
+const UserEdit = () => import(/* webpackChunkName: "user" */ '../views/user/UserEdit.vue')
+const MyFollow = () => import(/* webpackChunkName: "user" */ '../views/user/MyFollow.vue')
+const MyComment = () => import(/* webpackChunkName: "user" */ '../views/user/MyComment.vue')
+const MyStar = () => import(/* webpackChunkName: "user" */ '../views/user/MyStar.vue')
+const Home = () => import(/* webpackChunkName: "home" */ '../views/news/Home.vue')
+const Manage = () => import(/* webpackChunkName: "news" */ '../views/news/Manage.vue')
+const Article = () => import(/* webpackChunkName: "news" */ '../views/news/Article.vue')
+const Search = () => import(/* webpackChunkName: "news" */ '../views/news/Search.vue')
 
 Vue.use(VueRouter)
 

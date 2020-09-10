@@ -2,7 +2,7 @@
   <div class="user">
       <div class="user-header" @click='$router.push("/user-edit")'>
           <div class="avatar">
-              <img :src='$axios.defaults.baseURL + user.head_img' alt="">
+              <img :src='$base + user.head_img' alt="">
           </div>
           <div class="info">
               <span class="iconfont " :class='user.gender === 1 ? "iconxingbienan" : "iconxingbienv"'></span>

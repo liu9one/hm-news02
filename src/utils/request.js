@@ -4,7 +4,7 @@ import { Toast } from 'vant'
 import axios from 'axios'
 Vue.prototype.$axios = axios
 const URL = 'http://127.0.0.1:3000'
-axios.defaults.baseURL = URL
+axios.defaults.baseURL = '/api'
 Vue.prototype.$base = URL
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {

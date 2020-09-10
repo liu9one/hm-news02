@@ -2,7 +2,7 @@
   <div class="user-edit">
       <new-header>编辑信息</new-header>
       <div class="avatar">
-          <img :src="$axios.defaults.baseURL + user.head_img" alt="">
+          <img :src="$base + user.head_img" alt="">
           <van-uploader :after-read="afterRead" />
       </div>
       <new-navitem @click='showNickname'>
